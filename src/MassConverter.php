@@ -21,7 +21,7 @@ class MassConverter extends UnitConverter
         return $this->convertTo('oz');
     }
 
-    protected function convertTo($intended)
+    public function convertTo($intended)
     {
         if (array_key_exists($this->unit, $this->lookup)) {
             return round($this->quantity * $this->lookup[$this->unit][$intended], $this->decimals);
