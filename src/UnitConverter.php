@@ -2,7 +2,7 @@
 
 namespace Skoyah\Converter;
 
-class UnitConverter
+abstract class UnitConverter
 {
     protected $lookup;
     protected $quantity;
