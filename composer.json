@@ -16,7 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Skoyah\\": "src/"
+            "Skoyah\\Converter\\": "src/"
         }
     },
     "minimum-stability": "dev"
