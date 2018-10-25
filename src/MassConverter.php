@@ -6,6 +6,8 @@ use Skoyah\Converter\Exceptions\InvalidUnitException;
 
 class MassConverter extends UnitConverter
 {
+    protected $config = 'mass';
+
     public function toPounds()
     {
         return $this->convertTo('lbs');
@@ -19,14 +21,5 @@ class MassConverter extends UnitConverter
     public function toOunces()
     {
         return $this->convertTo('oz');
-    }
-
-    public function convertTo($intended)
-    {
-        if (array_key_exists($this->unit, $this->lookup)) {
-            return round($this->quantity * $this->lookup[$this->unit][$intended], $this->decimals);
-        }
-
-        throw new InvalidUnitException('Mass unit does not exist.');
     }
 }

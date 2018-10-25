@@ -9,9 +9,9 @@ class MassConverterTest extends TestCase
     /** @test */
     public function it_can_convert_kilograms_to_pounds()
     {
-        $quantity = new MassConverter(10, 'kg');
+        $quantity = new MassConverter(1, 'kg');
 
-        $this->assertEquals(22.0462262, $quantity->toPounds());
+        $this->assertEquals(2.205, $quantity->toPounds());
     }
 
     /** @test */
@@ -19,7 +19,10 @@ class MassConverterTest extends TestCase
     {
         $quantity = new MassConverter(1, 'lbs');
 
-        $this->assertEquals(0.45359237, $quantity->toKilograms());
+        $this->assertEquals(
+            round(0.45359237, 3),
+            $quantity->toKilograms()
+        );
     }
 
     /** @test */
@@ -44,7 +47,7 @@ class MassConverterTest extends TestCase
     {
         $quantity = new MassConverter(1, 'kg');
 
-        $this->assertEquals(35.2739619, $quantity->toOunces());
+        $this->assertEquals(round(35.2739619, 3), $quantity->toOunces());
     }
 
     /** @test */
