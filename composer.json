@@ -1,6 +1,9 @@
 {
     "name": "skoyah/unit-converter",
-    "description": "A simple tool for converting units.",
+    "description": "A simple tool for converting units of measurement.",
+    "keywords": [
+        "php", "converter", "unit-converter"
+    ],
     "require": {
         "php": "^7.1"
     },
