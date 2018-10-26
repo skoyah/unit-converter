@@ -7,20 +7,19 @@ use Skoyah\Converter\Exceptions\NotFoundException;
 
 abstract class Converter
 {
-    protected $lookup;
+    protected $conversionLookup;
+    protected $abbreviations;
+    protected $decimals = 6;
     protected $quantity;
     protected $unit;
-    protected $decimals = 3;
     protected $pivot;
-    protected $abbreviations;
 
     public function __construct($quantity, $unit)
     {
         $this->quantity = $quantity;
-        $this->lookup = $this->loadConfig();
-        $this->abbreviations = $this->loadAbbreviations();
-        $this->unit = $this->formatUnit($unit);
-        $this->pivot = $this->createPivot();
+        $this->loadConfig();
+        $this->formatUnit($unit);
+        $this->createPivot();
     }
 
     public function __call($name, $arguments)
@@ -37,10 +36,10 @@ abstract class Converter
 
     protected function formatUnit($unit)
     {
-        if (! array_key_exists($unit, $this->lookup)) {
+        if (! array_key_exists($unit, $this->conversionLookup)) {
             throw new InvalidUnitException(sprintf('The [%s] unit is not valid.', $unit));
         }
-        return $this->unit = strtolower($unit);
+        $this->unit = strtolower($unit);
     }
 
     public function setDecimals($decimals)
@@ -55,37 +54,47 @@ abstract class Converter
 
     protected function loadConfig()
     {
-        $lookup = require('config/units.php');
+        $configArray = require('config/units.php');
 
-        if (! array_key_exists($this->config, $lookup)) {
+        if (! array_key_exists($this->configKey, $configArray)) {
             throw new NotFoundException("The [{$this->config}] key does not exist in the config file.");
         }
 
-        return $lookup[$this->config];
+        $this->conversionLookup =  $configArray[$this->configKey];
+
+        $this->abbreviations = $this->loadAbbreviations();
     }
 
     protected function loadAbbreviations()
     {
         $abbreviations = require('config/abbreviations.php');
 
-        return $abbreviations[$this->config];
+        if (! array_key_exists($this->configKey, $abbreviations)) {
+            throw new InvalidUnitException(sprintf('The %s key does not exist in the abbreviations file.', $this->configKey));
+        };
+        return $abbreviations[$this->configKey];
     }
 
-    public function convertTo($intended)
+    public function convertTo($unit)
     {
-        if (! array_key_exists($intended, $this->lookup)) {
-            throw new InvalidUnitException("The [{$intended}] measuring unit does not exist.");
+        if (! array_key_exists($unit, $this->conversionLookup)) {
+            throw new InvalidUnitException("The [{$unit}] measuring unit does not exist.");
         }
 
-        if ($intended == 'kg') {
-            return round($this->quantity * $this->lookup[$this->unit], $this->decimals);
+        if (is_callable($this->conversionLookup[$unit])) {
+
+            return $this->conversionLookup[$unit]($this->pivot);
         }
 
-        return round($this->pivot / $this->lookup[$intended], $this->decimals);
+        return round($this->pivot / $this->conversionLookup[$unit], $this->decimals);
     }
 
     private function createPivot()
     {
-        return $this->quantity * $this->lookup[$this->unit];
+        if (is_callable($this->conversionLookup[$this->unit])) {
+            return $this->pivot = $this->conversionLookup[$this->unit]($this->quantity, true);
+        }
+
+        return $this->pivot = $this->quantity * $this->conversionLookup[$this->unit];
     }
 }

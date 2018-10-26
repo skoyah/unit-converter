@@ -5,8 +5,14 @@ return [
         'tonnes' => 't',
         'kilograms' => 'kg',
         'grams' => 'g',
-        'miligrams' => 'mg',
+        'milligrams' => 'mg',
         'pounds' => 'lbs',
         'ounces' => 'oz'
+    ],
+
+    'temperature' => [
+        'kelvin' => 'k',
+        'celsius' => 'c',
+        'fahrenheit' => 'f'
     ]
 ];

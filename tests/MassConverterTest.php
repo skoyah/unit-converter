@@ -7,70 +7,44 @@ use Skoyah\Converter\Exceptions\InvalidUnitException;
 class MassConverterTest extends TestCase
 {
     /** @test */
-    public function it_can_convert_kilograms_to_pounds()
+    public function it_converts_from_kilograms_to_different_mass_units()
     {
-        $quantity = new Mass(1, 'kg');
+        $mass = new Mass(10, 'kg');
 
-        $this->assertEquals(2.205, $quantity->toPounds());
-    }
-
-    /** @test */
-    public function it_can_convert_pounds_to_kilograms()
-    {
-        $quantity = new Mass(1, 'lbs');
-
+        $this->assertEquals(0.01, $mass->toTonnes());
+        $this->assertEquals(10, $mass->toKilograms());
+        $this->assertEquals(10000, $mass->toGrams());
+        $this->assertEquals(10000000, $mass->toMilligrams());
         $this->assertEquals(
-            round(0.45359237, $quantity->getDecimals()),
-            $quantity->toKilograms()
+            round(22.046226218, $mass->getDecimals()),
+            $mass->toPounds()
+        );
+        $this->assertEquals(
+            round(352.7396195, $mass->getDecimals()),
+            $mass->toOunces()
         );
     }
 
     /** @test */
-    public function it_can_convert_units_with_defined_decimal_values()
+    public function it_converts_from_different_mass_units_to_kilograms()
     {
-        $quantity = new Mass(1, 'lbs');
-        $quantity->setDecimals(2);
+        $milligram = new Mass(1, 'mg');
+        $gram = new Mass(1, 'g');
+        $ton = new Mass(1, 't');
+        $pound = new Mass(1, 'lbs');
+        $ounce = new Mass(1, 'oz');
 
-        $this->assertEquals(0.45, $quantity->toKilograms());
+        $this->assertEquals(0.000001, $milligram->toKilograms());
+        $this->assertEquals(0.001, $gram->toKilograms());
+        $this->assertEquals(1000, $ton->toKilograms());
+        $this->assertEquals(
+            round(0.45359237, $pound->getDecimals()),
+            $pound->toKilograms()
+        );
+        $this->assertEquals(
+            round(0.02834952, $ounce->getDecimals()),
+            $ounce->toKilograms()
+        );
     }
 
-    /** @test */
-    public function it_can_convert_pounds_to_ounces()
-    {
-        $quantity = new Mass(1, 'lbs');
-
-        $this->assertEquals(16, $quantity->toOunces());
-    }
-
-    /** @test */
-    public function it_can_convert_kilograms_to_ounces()
-    {
-        $quantity = new Mass(1, 'kg');
-
-        $this->assertEquals(round(35.2739619, 3), $quantity->toOunces());
-    }
-
-    /** @test */
-    public function it_can_convert_grams_to_pounds_with_four_decimal_numbers()
-    {
-        $quantity = new Mass(5, 'g');
-        $quantity->setDecimals(4);
-
-        $this->assertEquals(0.0110, $quantity->toPounds());
-    }
-
-    /** @test */
-    public function it_throws_an_exception_when_trying_to_instantiate_with_an_unknow_unit()
-    {
-        $this->expectException(InvalidUnitException::class);
-        $quantity = new Mass(5, 'foo');
-    }
-
-    /** @test */
-    public function it_throws_an_exception_when_trying_to_convert_to_an_unknow_unit()
-    {
-        $this->expectException(InvalidUnitException::class);
-        $quantity = new Mass(5, 'kg');
-        $quantity->toFoo();
-    }
 }

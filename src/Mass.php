@@ -4,5 +4,5 @@ namespace Skoyah\Converter;
 
 class Mass extends Converter
 {
-    protected $config = 'mass';
+    protected $configKey = 'mass';
 }
