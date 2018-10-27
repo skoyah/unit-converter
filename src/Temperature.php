@@ -2,6 +2,6 @@
 
 namespace Skoyah\Converter;
 
-class Temperature extends Converter{
+class Temperature extends Unit{
     protected $configKey = 'temperature';
 }
