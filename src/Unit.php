@@ -128,16 +128,16 @@ abstract class Unit
         }
 
         if (is_callable($this->conversionLookup[$unit])) {
-            return $this->conversionLookup[$unit]($this->pivot);
+            return $this->conversionLookup[$unit]($this->baseUnit);
         }
 
-        return round($this->pivot / $this->conversionLookup[$unit], $this->decimals);
+        return round($this->baseUnit / $this->conversionLookup[$unit], $this->decimals);
     }
 
     private function createBaseUnit()
     {
         if (is_callable($this->conversionLookup[$this->unit])) {
-            return $this->pivot = $this->conversionLookup[$this->unit]($this->quantity, true);
+            return $this->baseUnit = $this->conversionLookup[$this->unit]($this->quantity, true);
         }
 
         return $this->baseUnit = $this->quantity * $this->conversionLookup[$this->unit];
