@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use Skoyah\Converter\Mass;
-use Skoyah\Converter\Exceptions\InvalidUnitException;
 
 class MassConverterTest extends TestCase
 {
