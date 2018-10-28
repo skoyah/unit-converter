@@ -3,11 +3,21 @@
 namespace Skoyah\Converter;
 
 use Skoyah\Converter\Exceptions\InvalidUnitException;
-use Skoyah\Converter\Exceptions\NotFoundException;
 
 abstract class Unit
 {
-    protected $conversionLookup;
+    /**
+     * Array of convertions.
+     *
+     * @var array $lookup
+     */
+    protected $lookup;
+
+    /**
+     * Array of units and its abbreviations.
+     *
+     * @var array $abbreviations
+     */
     protected $abbreviations;
 
     /**
@@ -38,40 +48,40 @@ abstract class Unit
      */
     protected $baseUnit;
 
+    /**
+     * Sets the core properties.
+     *
+     * @param integer $quantity
+     * @param string $unit
+     */
     public function __construct($quantity, $unit)
     {
         $this->quantity = $quantity;
         $this->loadConfig();
         $this->validateUnit($unit);
-        $this->createBaseUnit();
+        $this->createConverterUnit();
     }
 
     /**
-     * Handle calls to unit conversions.
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return integer|float
+     * Gets the configuration settings for the specified unit type.
      */
-    public function __call($method, $arguments)
+    private function loadConfig()
     {
-        $key = strtolower(substr($method, 2));
+        $config = require 'config/units.php';
+        $abbreviations = require 'config/abbreviations.php';
 
-        if (!array_key_exists($key, $this->abbreviations)) {
-            throw new InvalidUnitException(sprintf('The %s measuring unit is not valid.', $key));
-        }
-
-        return $this->convertTo($this->abbreviations[$key]);
+        $this->lookup = $config[$this->configKey];
+        $this->abbreviations = $abbreviations[$this->configKey];
     }
 
     /**
-     * Validates the unit of measurement provided during instantiation.
+     * Validates and formats the unit type provided during instantiation.
      *
      * @param string $unit
      */
-    protected function validateUnit($unit)
+    private function validateUnit($unit)
     {
-        if (!array_key_exists($unit, $this->conversionLookup)) {
+        if (! array_key_exists($unit, $this->lookup)) {
             throw new InvalidUnitException(sprintf('The [%s] unit is not valid.', $unit));
         }
         $this->unit = strtolower($unit);
@@ -98,48 +108,51 @@ abstract class Unit
         return $this->decimals;
     }
 
-    protected function loadConfig()
-    {
-        $configArray = require 'config/units.php';
-
-        if (!array_key_exists($this->configKey, $configArray)) {
-            throw new NotFoundException("The [{$this->config}] key does not exist in the config file.");
-        }
-
-        $this->conversionLookup = $configArray[$this->configKey];
-
-        $this->abbreviations = $this->loadAbbreviations();
-    }
-
-    protected function loadAbbreviations()
-    {
-        $abbreviations = require 'config/abbreviations.php';
-
-        if (!array_key_exists($this->configKey, $abbreviations)) {
-            throw new InvalidUnitException(sprintf('The %s key does not exist in the abbreviations file.', $this->configKey));
-        };
-        return $abbreviations[$this->configKey];
-    }
-
+    /**
+     * Executes the convertion.
+     *
+     * @param integer $unit
+     * @return integer|float
+     */
     public function convertTo($unit)
     {
-        if (!array_key_exists($unit, $this->conversionLookup)) {
-            throw new InvalidUnitException("The [{$unit}] measuring unit does not exist.");
+        if ($this->isAlias($unit)) {
+            $unit = $this->abbreviations[$unit];
         }
 
-        if (is_callable($this->conversionLookup[$unit])) {
-            return $this->conversionLookup[$unit]($this->baseUnit);
+        if (! array_key_exists($unit, $this->lookup)) {
+            throw new InvalidUnitException(sprintf('The %s measuring unit does not exist.'), $unit);
         }
 
-        return round($this->baseUnit / $this->conversionLookup[$unit], $this->decimals);
+        if (is_callable($this->lookup[$unit])) {
+            return $this->lookup[$unit]($this->baseUnit);
+        }
+
+        return round($this->baseUnit / $this->lookup[$unit], $this->decimals);
     }
 
-    private function createBaseUnit()
+    /**
+     * Sets the unit to be used for all conversions.
+     *
+     * @return integer|float
+     */
+    private function createConverterUnit()
     {
-        if (is_callable($this->conversionLookup[$this->unit])) {
-            return $this->baseUnit = $this->conversionLookup[$this->unit]($this->quantity, true);
+        if (is_callable($this->lookup[$this->unit])) {
+            $this->baseUnit = $this->lookup[$this->unit]($this->quantity, true);
         }
 
-        return $this->baseUnit = $this->quantity * $this->conversionLookup[$this->unit];
+        $this->baseUnit = $this->quantity * $this->lookup[$this->unit];
+    }
+
+    /**
+     * Verifies if intended unit belongs has an abbreviation.
+     *
+     * @param string $unit
+     * @return boolean
+     */
+    private function isAlias($unit)
+    {
+        return array_key_exists($unit, $this->abbreviations);
     }
 }
