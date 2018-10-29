@@ -3,6 +3,7 @@
 namespace Skoyah\Converter;
 
 use Skoyah\Converter\Exceptions\InvalidUnitException;
+use Skoyah\Converter\Exceptions\FileNotFoundException;
 
 abstract class Unit
 {
@@ -11,14 +12,14 @@ abstract class Unit
      *
      * @var array $lookup
      */
-    protected $lookup;
+    protected $formulas;
 
     /**
-     * Array of units and its abbreviations.
+     * Array of units and its aliases.
      *
      * @var array $abbreviations
      */
-    protected $abbreviations;
+    protected $aliases;
 
     /**
      * Default decimal points.
@@ -46,7 +47,7 @@ abstract class Unit
      *
      * @var int $baseUnit
      */
-    protected $baseUnit;
+    protected $base;
 
     /**
      * Sets the core properties.
@@ -57,34 +58,42 @@ abstract class Unit
     public function __construct($quantity, $unit)
     {
         $this->quantity = $quantity;
-        $this->loadConfig();
-        $this->validateUnit($unit);
-        $this->createConverterUnit();
+        $this->loadAttributes();
+        $this->unit = $this->validate($unit);
+        $this->base = $this->calculateBaseUnit();
     }
 
     /**
      * Gets the configuration settings for the specified unit type.
      */
-    private function loadConfig()
+    private function loadAttributes()
     {
-        $config = require 'config/units.php';
-        $abbreviations = require 'config/abbreviations.php';
+        if (! file_exists(__DIR__ . "/config/{$this->configKey}.php")) {
+            throw new FileNotFoundException(sprintf('Uknown config file [%s.php].', $this->configKey));
+        }
 
-        $this->lookup = $config[$this->configKey];
-        $this->abbreviations = $abbreviations[$this->configKey];
+        $config = require "config/{$this->configKey}.php";
+
+        $this->aliases = $config['aliases'];
+        $this->formulas = $config['formulas'];
     }
 
     /**
      * Validates and formats the unit type provided during instantiation.
      *
      * @param string $unit
+     * @return string
      */
-    private function validateUnit($unit)
+    private function validate($unit)
     {
-        if (! array_key_exists($unit, $this->lookup)) {
+        if ($this->isAlias($unit)) {
+            $unit = $this->aliases[$unit];
+        }
+
+        if (!array_key_exists($unit, $this->formulas)) {
             throw new InvalidUnitException(sprintf('The [%s] unit is not valid.', $unit));
         }
-        $this->unit = strtolower($unit);
+        return strtolower($unit);
     }
 
     /**
@@ -111,24 +120,24 @@ abstract class Unit
     /**
      * Executes the convertion.
      *
-     * @param integer $unit
+     * @param string $unit
      * @return integer|float
      */
     public function convertTo($unit)
     {
         if ($this->isAlias($unit)) {
-            $unit = $this->abbreviations[$unit];
+            $unit = $this->aliases[$unit];
         }
 
-        if (! array_key_exists($unit, $this->lookup)) {
+        if (!array_key_exists($unit, $this->formulas)) {
             throw new InvalidUnitException(sprintf('The %s measuring unit does not exist.'), $unit);
         }
 
-        if (is_callable($this->lookup[$unit])) {
-            return $this->lookup[$unit]($this->baseUnit);
+        if (is_callable($this->formulas[$unit])) {
+            return $this->formulas[$unit]($this->base);
         }
 
-        return round($this->baseUnit / $this->lookup[$unit], $this->decimals);
+        return round($this->base / $this->formulas[$unit], $this->decimals);
     }
 
     /**
@@ -136,13 +145,13 @@ abstract class Unit
      *
      * @return integer|float
      */
-    private function createConverterUnit()
+    private function calculateBaseUnit()
     {
-        if (is_callable($this->lookup[$this->unit])) {
-            $this->baseUnit = $this->lookup[$this->unit]($this->quantity, true);
+        if (is_callable($this->formulas[$this->unit])) {
+            return $this->formulas[$this->unit]($this->quantity, true);
         }
 
-        $this->baseUnit = $this->quantity * $this->lookup[$this->unit];
+        return $this->quantity * $this->formulas[$this->unit];
     }
 
     /**
@@ -153,6 +162,6 @@ abstract class Unit
      */
     private function isAlias($unit)
     {
-        return array_key_exists($unit, $this->abbreviations);
+        return array_key_exists($unit, $this->aliases);
     }
 }

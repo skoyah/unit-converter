@@ -2,6 +2,6 @@
 
 namespace Skoyah\Converter\Exceptions;
 
-class NotFoundException extends \Exception
+class FileNotFoundException extends \Exception
 {
 }
