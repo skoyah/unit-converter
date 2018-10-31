@@ -8,7 +8,7 @@ use Skoyah\Converter\Exceptions\FileNotFoundException;
 abstract class Unit
 {
     /**
-     * Array of convertions.
+     * Array of convertion formulas.
      *
      * @var array $lookup
      */
@@ -22,13 +22,6 @@ abstract class Unit
     protected $aliases;
 
     /**
-     * Default decimal points.
-     *
-     * @var integer $decimals
-     */
-    protected $decimals = 6;
-
-    /**
      * The unit quantity.
      *
      * @var int $quantity
@@ -36,7 +29,7 @@ abstract class Unit
     protected $quantity;
 
     /**
-     * The unit type defined upon instantiation.
+     * The type of unit defined upon instantiation.
      *
      * @var string $unit
      */
@@ -90,31 +83,7 @@ abstract class Unit
             $unit = $this->aliases[$unit];
         }
 
-        if (!array_key_exists($unit, $this->formulas)) {
-            throw new InvalidUnitException(sprintf('The [%s] unit is not valid.', $unit));
-        }
         return strtolower($unit);
-    }
-
-    /**
-     * Set the decimal points.
-     *
-     * @param integer $decimals
-     * @return integer
-     */
-    public function setDecimals($decimals)
-    {
-        return $this->decimals = $decimals;
-    }
-
-    /**
-     * Get the decimal points.
-     *
-     * @return integer
-     */
-    public function getDecimals()
-    {
-        return $this->decimals;
     }
 
     /**
@@ -123,21 +92,13 @@ abstract class Unit
      * @param string $unit
      * @return integer|float
      */
-    public function convertTo($unit)
+    public function to($unit, $precision = null)
     {
         if ($this->isAlias($unit)) {
             $unit = $this->aliases[$unit];
         }
 
-        if (!array_key_exists($unit, $this->formulas)) {
-            throw new InvalidUnitException(sprintf('The %s measuring unit does not exist.'), $unit);
-        }
-
-        if (is_callable($this->formulas[$unit])) {
-            return $this->formulas[$unit]($this->base);
-        }
-
-        return round($this->base / $this->formulas[$unit], $this->decimals);
+        return $this->calculate($unit, $precision);
     }
 
     /**
@@ -164,4 +125,32 @@ abstract class Unit
     {
         return array_key_exists($unit, $this->aliases);
     }
+
+    /**
+     * Calculates the convertion.
+     *
+     * @param string $unit
+     * @param integer|null $precision
+     * @return integer|float
+     */
+    private function calculate($unit, $precision)
+    {
+        if (is_callable($this->formulas[$unit])) {
+            return $this->formulas[$unit]($this->base);
+        }
+
+        if ($precision) {
+            return round($this->base / $this->formulas[$unit], $precision, PHP_ROUND_HALF_UP);
+        }
+
+        return $this->base / $this->formulas[$unit];
+    }
+
+    public function base()
+    {
+        $bases = require 'config/bases.php';
+
+        return $bases[$this->configKey];
+    }
+
 }

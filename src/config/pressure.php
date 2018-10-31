@@ -12,14 +12,12 @@ return [
     */
 
     'aliases' => [
-        'tonnes' => 't',
-        'kilograms' => 'kg',
-        'grams' => 'g',
-        'milligrams' => 'mg',
-        'pounds' => 'lbs',
-        'ounces' => 'oz',
+        'bars' => 'bar',
+        'pascals' => 'pa',
+        'kilopascals' => 'kpa',
+        'atmospheres' => 'atm',
+        'millibars' => 'mbar',
     ],
-
 
     /*
     |--------------------------------------------------------------------------
@@ -31,11 +29,14 @@ return [
     */
 
     'formulas' => [
-        't' => 1000,
-        'kg' => 1, // SI Unit
-        'g' => 0.001,
-        'mg' => 0.000001,
-        'lbs' => 0.45359237,
-        'oz' => 0.0283495231,
+        'bar' => 100000,
+        'pa' => 1, // SI Unit
+        'kpa' => 0.001,
+        'psi' => 6894.7572932,
+        'ksi' => 6894757.2932,
+        'atm' => 101325,
+        'mbar' => 100,
+        'mpa' => 0.001
     ],
+
 ];
