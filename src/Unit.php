@@ -146,6 +146,11 @@ abstract class Unit
         return $this->base / $this->formulas[$unit];
     }
 
+    /**
+     * Gets the base unit to be used on convertions for the current unit type.
+     *
+     * @return string
+     */
     public function base()
     {
         $bases = require 'config/bases.php';
