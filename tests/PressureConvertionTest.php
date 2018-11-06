@@ -8,7 +8,7 @@ class PressureConvertionTest extends TestCase
     /** @test */
     public function it_has_pascal_unit_as_the_base_unit_for_convertions()
     {
-        $pressure = new Pressure('1', 'bar');
+        $pressure = new Pressure(1, 'bar');
 
         $this->assertEquals('pascals', $pressure->base());
     }
