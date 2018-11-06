@@ -90,6 +90,12 @@ abstract class Unit
         return strtolower($unit);
     }
 
+    /**
+     * Validates the quantity provided during instantiation.
+     *
+     * @param integer $quantity
+     * @return integer $quantity
+     */
     private function validateQuantity($quantity)
     {
         if (gettype($quantity) !== 'integer') {
