@@ -79,13 +79,15 @@ abstract class Unit
      */
     private function validateUnit($unit)
     {
+        $unit = strtolower($unit);
+
         $this->guardAgainstInvalidUnit($unit);
 
         if ($this->isAlias($unit)) {
             $unit = $this->aliases[$unit];
         }
 
-        return strtolower($unit);
+        return $unit;
     }
 
     /**
