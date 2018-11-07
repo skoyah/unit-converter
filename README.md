@@ -13,7 +13,8 @@ ___
 2. [Basic Usage](#basic-usage)
 3. [Support](#support)
 4. [Configuration](#configuration)
-5. [License](#license)
+5. [Code of Conduct](#code-of-conduct)
+6. [License](#license)
 
 ___
 ## Installation
@@ -119,6 +120,9 @@ For consistency, it is __recommended__ to use lowercase letters, but if you pref
 |*square inches*     |    *in2*|
 |*square feet*       |    *ft2*|
 |*square yards*      |    *yd2*|
+
+## Code of Conduct
+In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/skoyah/unit-converter/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 Unit Converter is released under the MIT Licence. Read the [license](https://github.com/skoyah/unit-converter/blob/master/LICENSE.md) file for more details.
