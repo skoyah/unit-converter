@@ -2,9 +2,10 @@
 
 Unit Converter is a PHP library that makes unit converting a fairly simple an intuitive process.
 
-<a href="https://travis-ci.org/skoyah/unit-converter"><img src="https://travis-ci.org/skoyah/unit-converter.svg" alt="Build Status"></a>
+[![Build Status](https://travis-ci.org/skoyah/unit-converter.svg?branch=master)](https://travis-ci.org/skoyah/unit-converter)
 [![Latest Stable Version](https://poser.pugx.org/skoyah/unit-converter/v/stable)](https://packagist.org/packages/skoyah/unit-converter)
 [![License](https://poser.pugx.org/skoyah/unit-converter/license)](https://packagist.org/packages/skoyah/unit-converter)
+[![StyleCI](https://github.styleci.io/repos/154382621/shield?branch=master)](https://github.styleci.io/repos/154382621)
 ___
 ## Table of Contents
 

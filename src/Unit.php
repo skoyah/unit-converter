@@ -50,9 +50,9 @@ abstract class Unit
      */
     public function __construct($quantity, $unit)
     {
-        $this->quantity = $quantity;
+        $this->quantity = $this->validateQuantity($quantity);
         $this->loadAttributes();
-        $this->unit = $this->validate($unit);
+        $this->unit = $this->validateUnit($unit);
         $this->base = $this->calculateBaseUnit();
     }
 
@@ -62,7 +62,7 @@ abstract class Unit
     private function loadAttributes()
     {
         if (! file_exists(__DIR__ . "/config/{$this->configKey}.php")) {
-            throw new FileNotFoundException(sprintf('Uknown config file [%s.php].', $this->configKey));
+            throw new FileNotFoundException(sprintf('Unknown config file [%s.php].', $this->configKey));
         }
 
         $config = require "config/{$this->configKey}.php";
@@ -77,13 +77,41 @@ abstract class Unit
      * @param string $unit
      * @return string
      */
-    private function validate($unit)
+    private function validateUnit($unit)
     {
+        if (! $this->isAlias($unit) && ! array_key_exists($unit, $this->formulas)) {
+            throw new InvalidUnitException(sprintf('Unknown unit type: [%s] in [%s.php] configuration file.', $unit, $this->configKey));
+        }
+
         if ($this->isAlias($unit)) {
             $unit = $this->aliases[$unit];
         }
 
         return strtolower($unit);
+    }
+
+    /**
+     * Validates the quantity provided during instantiation.
+     *
+     * @param integer $quantity
+     * @return integer $quantity
+     */
+    private function validateQuantity($quantity)
+    {
+        if (gettype($quantity) !== 'integer') {
+            throw new \InvalidArgumentException(
+                sprintf('The unit\'s quantity must be a positive integer: %s given (%s).', gettype($quantity), $quantity)
+            );
+        }
+
+        if ($quantity < 0) {
+            throw new \InvalidArgumentException(
+                sprintf('The unit\'s quantity must be a positive integer: (%s) given.', $quantity)
+            );
+        }
+
+        return $quantity;
+
     }
 
     /**
