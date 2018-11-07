@@ -66,4 +66,4 @@ Currently, the Unit Converter supports the following types:
 For each unit type [supported](#support) by the library, there are 2 files - a configuration file and a class file associated with that unit.
 
 ## License
-Unit Converter is released under the MIT Licence. Read the LICENSE.md file for more details.
+Unit Converter is released under the MIT Licence. Read the [license](https://github.com/skoyah/unit-converter/blob/master/LICENSE.md) file for more details.
