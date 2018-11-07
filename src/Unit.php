@@ -157,5 +157,4 @@ abstract class Unit
 
         return $bases[$this->configKey];
     }
-
 }
