@@ -79,9 +79,7 @@ abstract class Unit
      */
     private function validateUnit($unit)
     {
-        if (! $this->isAlias($unit) && ! array_key_exists($unit, $this->formulas)) {
-            throw new InvalidUnitException(sprintf('Unknown unit type: [%s] in [%s.php] configuration file.', $unit, $this->configKey));
-        }
+        $this->guardAgainstInvalidUnit($unit);
 
         if ($this->isAlias($unit)) {
             $unit = $this->aliases[$unit];
@@ -122,6 +120,8 @@ abstract class Unit
      */
     public function to($unit, $precision = null)
     {
+        $this->guardAgainstInvalidUnit($unit);
+
         if ($this->isAlias($unit)) {
             $unit = $this->aliases[$unit];
         }
@@ -163,6 +163,8 @@ abstract class Unit
      */
     private function calculate($unit, $precision)
     {
+        $this->guardAgainstInvalidUnit($unit);
+
         if (is_callable($this->formulas[$unit])) {
             return $this->formulas[$unit]($this->base);
         }
@@ -184,6 +186,19 @@ abstract class Unit
         $bases = require 'config/bases.php';
 
         return $bases[$this->configKey];
+    }
+
+    /**
+     * Checks if the provided unit exists in the configuration file.
+     *
+     * @param string $unit
+     * @return void
+     */
+    private function guardAgainstInvalidUnit($unit)
+    {
+        if (!$this->isAlias($unit) && !array_key_exists($unit, $this->formulas)) {
+            throw new InvalidUnitException(sprintf('Unknown unit type: [%s] in [%s.php] configuration file.', $unit, $this->configKey));
+        }
     }
 
 }
