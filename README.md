@@ -54,16 +54,71 @@ echo $mass->to('lbs', 2); // '2.20'
 
 ## Support
 Currently, the Unit Converter supports the following types:
-<ul>
-    <li>Mass</li>
-    <li>Temperature</li>
-    <li>Length
-    <li>Pressure
-    <li>Area - <em><strong>New</strong></em></li>
-</ul>
+
+* [Mass](#mass-units)
+* [Temperature](#temperature-units)
+* [Length](#length-units)
+* [Pressure](#pressure-units)
+* [Area](#area-units) - <em><strong>New</strong></em>
+
 
 ## Configuration
-For each unit type [supported](#support) by the library, there are 2 files - a configuration file and a class file associated with that unit.
+During instantiation or convertion, you have two options for defining the unit to be used.
+
+There is a longform and a short-hand word available for each unit of measure.
+
+For consistency, it is __recommended__ to use lowercase letters, but if you prefer you can use uppercase letters since during instantiation and/or convertion, the unit of measure will be parsed and formatted to lowercase characters.
+
+### Mass units
+| long       | short   |
+| :--------- | :------ |
+|*tonnes*    |     *t* |
+|*kilograms* |     *kg*|
+|*grams*     |      *g*|
+|*milligrams*|     *mg*|
+|*pounds*    |    *lbs*|
+|*onces*     |     *oz*|
+
+### Temperature units
+| long       | short   |
+| :--------- | :------ |
+|*kelvin*    |      *k*|
+|*celsius*   |      *c*|
+|*fahrenheit*|      *f*|
+
+### Length units
+| long           | short   |
+| :------------- | :------ |
+|*kilometers*    |     *km*|
+|*meters*        |      *m*|
+|*decimeters*    |     *dm*|
+|*centimeters*   |     *cm*|
+|*millimeters*   |     *mm*|
+|*inches*        |     *in*|
+|*feet*          |     *ft*|
+|*yards*         |     *yd*|
+|*miles*         |     *mi*|
+|*nautical miles*|    *nmi*|
+
+### Pressure units
+| long        | short   |
+| :---------- | :------ |
+|*bars*       |    *bar*|
+|*millibars*  |   *mbar*|
+|*kilopascals*|    *kpa*|
+|*pascals*    |     *pa*|
+|*atmospheres*|    *atm*|
+
+### Area units
+| long               | short   |
+| :----------------  | :------ |
+|*square kilometers* |    *km2*|
+|*square meters*     |     *m2*|
+|*square centimeters*|    *cm2*|
+|*square millimeters*|    *mm2*|
+|*square inches*     |    *in2*|
+|*square feet*       |    *ft2*|
+|*square yards*      |    *yd2*|
 
 ## License
 Unit Converter is released under the MIT Licence. Read the [license](https://github.com/skoyah/unit-converter/blob/master/LICENSE.md) file for more details.
