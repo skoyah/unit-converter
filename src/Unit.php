@@ -199,5 +199,4 @@ abstract class Unit
             throw new InvalidUnitException(sprintf('Unknown unit type: [%s] in [%s.php] configuration file.', $unit, $this->configKey));
         }
     }
-
 }
