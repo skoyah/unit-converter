@@ -111,7 +111,6 @@ abstract class Unit
         }
 
         return $quantity;
-
     }
 
     /**
