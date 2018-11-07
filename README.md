@@ -57,8 +57,9 @@ Currently, the Unit Converter supports the following types:
 <ul>
     <li>Mass</li>
     <li>Temperature</li>
-    <li>Length - <em><strong>New</strong></em></li>
-    <li>Pressure - <em><strong>New</strong></em></li>
+    <li>Length
+    <li>Pressure
+    <li>Area - <em><strong>New</strong></em></li>
 </ul>
 
 ## Configuration
