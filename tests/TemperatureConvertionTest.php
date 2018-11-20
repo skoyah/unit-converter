@@ -1,12 +1,21 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Skoyah\Converter\Temperature;
+use Skoyah\Converter\Units\Temperature;
 
 class TemperatureConvertionTest extends TestCase
 {
+    protected $temperature;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->temperature = new Temperature(100, 'k');
+    }
+
     /** @test */
-    public function it_calculates_base_unit_when_instantiated()
+    public function it_calculates_base_temperature_unit_when_instantiated()
     {
         $temperature = new Temperature(1, 'c');
 
@@ -14,16 +23,26 @@ class TemperatureConvertionTest extends TestCase
     }
 
     /** @test */
-    public function it_converts_from_kelvin_to_different_temperature_units()
+    public function it_converts_from_kelvin_to_kelvin()
     {
-        $temperature = new Temperature(100, 'k');
+        $this->assertEquals(100, $this->temperature->to('kelvin'));
+        $this->assertEquals(100, $this->temperature->to('k'));
+        $this->assertEquals(100, $this->temperature->toKelvin());
+    }
 
-        $this->assertEquals(100, $temperature->to('kelvin'));
-        $this->assertEquals(-173.15, $temperature->to('celsius'));
-        $this->assertEquals(-279.67, $temperature->to('fahrenheit'));
+    /** @test */
+    public function it_converts_from_kelvin_to_celsius()
+    {
+        $this->assertEquals(-173.15, $this->temperature->withDecimals(2)->to('celsius'));
+        $this->assertEquals(-173.15, $this->temperature->withDecimals(2)->to('c'));
+        $this->assertEquals(-173.15, $this->temperature->withDecimals(2)->toCelsius());
+    }
 
-        $this->assertEquals(100, $temperature->to('k'));
-        $this->assertEquals(-173.15, $temperature->to('c'));
-        $this->assertEquals(-279.67, $temperature->to('f'));
+    /** @test */
+    public function it_converts_from_kelvin_to_fahrenheit()
+    {
+        $this->assertEquals(-279.67, $this->temperature->withDecimals(2)->to('fahrenheit'));
+        $this->assertEquals(-279.67, $this->temperature->withDecimals(2)->to('f'));
+        $this->assertEquals(-279.67, $this->temperature->withDecimals(2)->toFahrenheit());
     }
 }

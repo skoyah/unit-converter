@@ -1,6 +1,6 @@
 <?php
 
-use Skoyah\Converter\Area;
+use Skoyah\Converter\Units\Area;
 use PHPUnit\Framework\TestCase;
 
 class AreaConvertionTest extends TestCase
@@ -22,8 +22,8 @@ class AreaConvertionTest extends TestCase
         $this->assertEquals(10000 , $area->to('cm2'));
         $this->assertEquals(1 , $area->to('m2'));
         $this->assertEquals(0.000001 , $area->to('km2'));
-        $this->assertEquals(1550.4 , $area->to('in2', 1));
-        $this->assertEquals(10.764 , $area->to('ft2', 3));
-        $this->assertEquals(1.19599 , $area->to('square yards', 5));
+        $this->assertEquals(1550.4 , $area->withDecimals(1)->to('in2'));
+        $this->assertEquals(10.764 , $area->withDecimals(3)->to('ft2'));
+        $this->assertEquals(1.19599 , $area->withDecimals(5)->to('square yards'));
     }
 }

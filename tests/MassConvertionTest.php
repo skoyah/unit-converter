@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Skoyah\Converter\Mass;
+use Skoyah\Converter\Units\Mass;
 
 class MassConvertionTest extends TestCase
 {
@@ -14,8 +14,8 @@ class MassConvertionTest extends TestCase
         $this->assertEquals(10, $mass->to('kilograms'));
         $this->assertEquals(10000, $mass->to('grams'));
         $this->assertEquals(10000000, $mass->to('milligrams'));
-        $this->assertEquals(22.05, $mass->to('pounds', 2));
-        $this->assertEquals(352.74, $mass->to('ounces', 2));
+        $this->assertEquals(22.05, $mass->withDecimals(2)->to('pounds'));
+        $this->assertEquals(352.74, $mass->withDecimals(2)->to('ounces'));
     }
 
     /** @test */
@@ -30,8 +30,7 @@ class MassConvertionTest extends TestCase
         $this->assertEquals(0.000001, $milligram->to('kilograms'));
         $this->assertEquals(0.001, $gram->to('kilograms'));
         $this->assertEquals(1000, $ton->to('kilograms'));
-        $this->assertEquals(0.45, $pound->to('kilograms', 2));
-        $this->assertEquals(0.028, $ounce->to('kilograms', 3));
+        $this->assertEquals(0.45, $pound->withDecimals(2)->to('kilograms'));
+        $this->assertEquals(0.028, $ounce->withDecimals(3)->to('kilograms'));
     }
-
 }

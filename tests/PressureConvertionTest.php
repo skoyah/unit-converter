@@ -1,7 +1,7 @@
 <?php
 
-use Skoyah\Converter\Pressure;
 use PHPUnit\Framework\TestCase;
+use Skoyah\Converter\Units\Pressure;
 
 class PressureConvertionTest extends TestCase
 {

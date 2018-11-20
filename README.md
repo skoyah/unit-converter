@@ -35,7 +35,7 @@ Next, all you need is to call a ```to()``` method and pass in the parameter for 
 
 ### Example conversion:
 ```php
-use Skoyah\Converter\Mass;
+use Skoyah\Converter\Units\Mass;
 
 $mass = new Mass(1, 'kg');
 echo $mass->to('pounds'); // '2.20462262'
@@ -56,11 +56,11 @@ echo $mass->to('lbs', 2); // '2.20'
 ## Support
 Currently, the Unit Converter supports the following types:
 
-* [Mass](#mass-units)
-* [Temperature](#temperature-units)
+* [Area](#area-units)
 * [Length](#length-units)
+* [Mass](#mass-units)
 * [Pressure](#pressure-units)
-* [Area](#area-units) - <em><strong>New</strong></em>
+* [Temperature](#temperature-units)
 
 
 ## Configuration
@@ -70,22 +70,16 @@ There is a longform and a short-hand word available for each unit of measure.
 
 For consistency, it is __recommended__ to use lowercase letters, but if you prefer you can use uppercase letters since during instantiation and/or convertion, the unit of measure will be parsed and formatted to lowercase characters.
 
-### Mass units
-| long       | short   |
-| :--------- | :------ |
-|*tonnes*    |     *t* |
-|*kilograms* |     *kg*|
-|*grams*     |      *g*|
-|*milligrams*|     *mg*|
-|*pounds*    |    *lbs*|
-|*onces*     |     *oz*|
-
-### Temperature units
-| long       | short   |
-| :--------- | :------ |
-|*kelvin*    |      *k*|
-|*celsius*   |      *c*|
-|*fahrenheit*|      *f*|
+### Area units
+| long               | short   |
+| :----------------  | :------ |
+|*square kilometers* |    *km2*|
+|*square meters*     |     *m2*|
+|*square centimeters*|    *cm2*|
+|*square millimeters*|    *mm2*|
+|*square inches*     |    *in2*|
+|*square feet*       |    *ft2*|
+|*square yards*      |    *yd2*|
 
 ### Length units
 | long           | short   |
@@ -101,6 +95,16 @@ For consistency, it is __recommended__ to use lowercase letters, but if you pref
 |*miles*         |     *mi*|
 |*nautical miles*|    *nmi*|
 
+### Mass units
+| long       | short   |
+| :--------- | :------ |
+|*tonnes*    |     *t* |
+|*kilograms* |     *kg*|
+|*grams*     |      *g*|
+|*milligrams*|     *mg*|
+|*pounds*    |    *lbs*|
+|*onces*     |     *oz*|
+
 ### Pressure units
 | long        | short   |
 | :---------- | :------ |
@@ -110,16 +114,12 @@ For consistency, it is __recommended__ to use lowercase letters, but if you pref
 |*pascals*    |     *pa*|
 |*atmospheres*|    *atm*|
 
-### Area units
-| long               | short   |
-| :----------------  | :------ |
-|*square kilometers* |    *km2*|
-|*square meters*     |     *m2*|
-|*square centimeters*|    *cm2*|
-|*square millimeters*|    *mm2*|
-|*square inches*     |    *in2*|
-|*square feet*       |    *ft2*|
-|*square yards*      |    *yd2*|
+### Temperature units
+| long       | short   |
+| :--------- | :------ |
+|*kelvin*    |      *k*|
+|*celsius*   |      *c*|
+|*fahrenheit*|      *f*|
 
 ## Code of Conduct
 In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/skoyah/unit-converter/blob/master/CODE_OF_CONDUCT.md).
