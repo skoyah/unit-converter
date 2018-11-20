@@ -96,7 +96,6 @@ abstract class BaseUnit
      */
     public function to($unit)
     {
-
         $unit = strtolower($unit);
 
         $this->guardAgainstInvalidUnit($unit);
@@ -167,7 +166,7 @@ abstract class BaseUnit
      */
     private function guardAgainstInvalidUnit($unit)
     {
-        if ( ! $this->isAlias($unit) && ! $this->hasFormula($unit) ) {
+        if (! $this->isAlias($unit) && ! $this->hasFormula($unit)) {
             throw new \Exception("Unknown unit type: [{$unit}] in the configuration file.");
         }
     }

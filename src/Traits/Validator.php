@@ -14,7 +14,7 @@ trait Validator
     {
         if (! is_numeric($quantity) || $quantity < 0) {
             throw new \InvalidArgumentException(
-                sprintf('The quantity must be a positive number or a numeric string: %s given (%s).',gettype($quantity), $quantity)
+                sprintf('The quantity must be a positive number or a numeric string: %s given (%s).', gettype($quantity), $quantity)
             );
         }
 
