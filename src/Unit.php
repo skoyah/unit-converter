@@ -10,14 +10,14 @@ abstract class Unit
     /**
      * Array of convertion formulas.
      *
-     * @var array $lookup
+     * @var array $formulas
      */
     protected $formulas;
 
     /**
      * Array of units and its aliases.
      *
-     * @var array $abbreviations
+     * @var array $aliases
      */
     protected $aliases;
 
@@ -38,7 +38,7 @@ abstract class Unit
     /**
      * The base unit value used for all conversions.
      *
-     * @var int $baseUnit
+     * @var int $base
      */
     protected $base;
 
@@ -61,7 +61,7 @@ abstract class Unit
      */
     private function loadAttributes()
     {
-        if (! file_exists(__DIR__ . "/config/{$this->configKey}.php")) {
+        if (!file_exists(__DIR__ . "/config/{$this->configKey}.php")) {
             throw new FileNotFoundException(sprintf('Unknown config file [%s.php].', $this->configKey));
         }
 
