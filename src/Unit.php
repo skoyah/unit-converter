@@ -3,7 +3,6 @@
 namespace Skoyah\Converter;
 
 use Skoyah\Converter\Exceptions\InvalidUnitException;
-use Skoyah\Converter\Exceptions\FileNotFoundException;
 
 abstract class Unit
 {
@@ -50,8 +49,8 @@ abstract class Unit
      */
     public function __construct($quantity, $unit)
     {
+        $this->loadConfigFile();
         $this->quantity = $this->validateQuantity($quantity);
-        $this->loadAttributes();
         $this->unit = $this->validateUnit($unit);
         $this->base = $this->calculateBaseUnit();
     }
@@ -59,13 +58,9 @@ abstract class Unit
     /**
      * Gets the configuration settings for the specified unit type.
      */
-    private function loadAttributes()
+    private function loadConfigFile()
     {
-        if (!file_exists(__DIR__ . "/config/{$this->configKey}.php")) {
-            throw new FileNotFoundException(sprintf('Unknown config file [%s.php].', $this->configKey));
-        }
-
-        $config = require "config/{$this->configKey}.php";
+        $config = require __DIR__ . "/config/{$this->configKey}.php";
 
         $this->aliases = $config['aliases'];
         $this->formulas = $config['formulas'];
@@ -81,13 +76,11 @@ abstract class Unit
     {
         $unit = strtolower($unit);
 
-        $this->guardAgainstInvalidUnit($unit);
-
-        if ($this->isAlias($unit)) {
-            $unit = $this->aliases[$unit];
+        if (!$this->isAlias($unit) && !array_key_exists($unit, $this->formulas)) {
+            throw new InvalidUnitException(sprintf('Unknown unit type: [%s] in [%s.php] configuration file.', $unit, $this->configKey));
         }
 
-        return $unit;
+        return $this->isAlias($unit) ? $this->aliases[$unit] : $unit;
     }
 
     /**
@@ -98,16 +91,8 @@ abstract class Unit
      */
     private function validateQuantity($quantity)
     {
-        if (gettype($quantity) !== 'integer') {
-            throw new \InvalidArgumentException(
-                sprintf('The unit\'s quantity must be a positive integer: %s given (%s).', gettype($quantity), $quantity)
-            );
-        }
-
-        if ($quantity < 0) {
-            throw new \InvalidArgumentException(
-                sprintf('The unit\'s quantity must be a positive integer: (%s) given.', $quantity)
-            );
+        if (!is_int($quantity) && !is_float($quantity) || $quantity < 0) {
+            throw new \InvalidArgumentException(sprintf('The quantity must be a positive number: %s given (%s).', gettype($quantity), $quantity));
         }
 
         return $quantity;
@@ -121,8 +106,6 @@ abstract class Unit
      */
     public function to($unit, $precision = null)
     {
-        $this->guardAgainstInvalidUnit($unit);
-
         if ($this->isAlias($unit)) {
             $unit = $this->aliases[$unit];
         }
@@ -164,8 +147,6 @@ abstract class Unit
      */
     private function calculate($unit, $precision)
     {
-        $this->guardAgainstInvalidUnit($unit);
-
         if (is_callable($this->formulas[$unit])) {
             return $this->formulas[$unit]($this->base);
         }
@@ -187,18 +168,5 @@ abstract class Unit
         $bases = require 'config/bases.php';
 
         return $bases[$this->configKey];
-    }
-
-    /**
-     * Checks if the provided unit exists in the configuration file.
-     *
-     * @param string $unit
-     * @return void
-     */
-    private function guardAgainstInvalidUnit($unit)
-    {
-        if (!$this->isAlias($unit) && !array_key_exists($unit, $this->formulas)) {
-            throw new InvalidUnitException(sprintf('Unknown unit type: [%s] in [%s.php] configuration file.', $unit, $this->configKey));
-        }
     }
 }
