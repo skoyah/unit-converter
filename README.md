@@ -60,7 +60,8 @@ Currently, the Unit Converter supports the following types:
 * [Temperature](#temperature-units)
 * [Length](#length-units)
 * [Pressure](#pressure-units)
-* [Area](#area-units) - <em><strong>New</strong></em>
+* [Area](#area-units)
+* [Volume](#volume-units) - <em><strong>New</strong></em>
 
 
 ## Configuration
@@ -121,8 +122,21 @@ For consistency, it is __recommended__ to use lowercase letters, but if you pref
 |*square feet*       |    *ft2*|
 |*square yards*      |    *yd2*|
 
+### Volume units
+| long               | short   |
+| :----------------  | :------ |
+|*cubic millimeters* |    *mm3*|
+|*cubic centimeter*  |    *cm3*|
+|*cubic decimeter*   |    *dm3*|
+|*cubic meter*       |     *m3*|
+|*cubic dekameter*   |   *dam3*|
+|*cubic hectometer*  |    *hm3*|
+|*cubic kilometer*   |    *km3*|
+
+
+
 ## Code of Conduct
-In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/skoyah/unit-converter/blob/master/CODE_OF_CONDUCT.md).
+In order to ensure that the community is welcoming to all| please review and abide by the [Code of Conduct](https://github.com/skoyah/unit-converter/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 Unit Converter is released under the MIT Licence. Read the [license](https://github.com/skoyah/unit-converter/blob/master/LICENSE.md) file for more details.
