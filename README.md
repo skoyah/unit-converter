@@ -136,7 +136,7 @@ For consistency, it is __recommended__ to use lowercase letters, but if you pref
 
 
 ## Code of Conduct
-In order to ensure that the community is welcoming to all| please review and abide by the [Code of Conduct](https://github.com/skoyah/unit-converter/blob/master/CODE_OF_CONDUCT.md).
+In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/skoyah/unit-converter/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 Unit Converter is released under the MIT Licence. Read the [license](https://github.com/skoyah/unit-converter/blob/master/LICENSE.md) file for more details.
